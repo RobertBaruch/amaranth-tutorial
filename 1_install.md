@@ -2,7 +2,7 @@
 
 ## Install all the things
 
-> It's unfortunate that installation of everything you need isn't a one-click process... although [FPGAWars' Apio](http://fpgawars.github.io/) goes a long way towards doing this. I just think that while yosys and Amaranth HDL are undergoing constant positive updates, Apio doesn't keep up with them. In the meantime, we just install all the tools separately.
+> TODO: Take a look at [YosysHQ/oss-cad-suite-build](https://github.com/YosysHQ/oss-cad-suite-build) which seems to contain All The Things and then some, and also seems to be updated very often.
 
 ## Follow the directions
 
