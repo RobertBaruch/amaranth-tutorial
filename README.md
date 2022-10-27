@@ -1,7 +1,7 @@
-# nmigen-tutorial
-A tutorial for using nmigen
+# amaranth-tutorial
+A tutorial for using [Amaranth HDL](https://amaranth-lang.org/).
 
-WORK IN PROGRESS
+WORK IN PROGRESS: converting from nmigen to Amaranth.
 
 1. [Installing](1_install.md)
 2. [Values](2_values.md)
