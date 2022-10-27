@@ -1,5 +1,7 @@
 # Splitting and combining signals
 
+> Note: This chapter is merely a short introduction. The [Bit sequence operators](https://amaranth-lang.org/docs/amaranth/latest/lang.html#bit-sequence-operators) chapter of the Amaranth language guide goes into more detail.
+
 ## Slicing signals
 
 We can use the array indexing operator to extract bits from a signal. For example, given a 16-bit signal `s`, we can get the least significant bit via `s[0]` or the most significant bit via `s[15]`.
@@ -20,7 +22,7 @@ Shape(width=16, signed=True)
 Shape(width=1, signed=False)
 ```
 
-Just like Python arrays, the bits in a signal are always ordered in one and only one way. This can cause a bit of confusion for those familiar with indexing in HDL. While `s[7:0]` might seem to extract the eight least significant bits of a signal, this is not the way Python works, and _it is Python that we are programming in_. The correct way to extract the eight least significant bits of a signal would be `s[0:8]` or `s[:8]`, and this is the same way we would extract the first eight elements of a Python array. In essence, the _first_ N bits of a signal, when treated like an array of bits, are the N _least significant_ bits of that signal.
+Just like Python arrays, the bits in a signal are always ordered in one and only one way. This can cause a bit of confusion for those familiar with indexing in HDL. While `s[7:0]` might seem to extract the eight least significant bits of a signal, this is not the way Python works, and *it is Python that we are programming in*. The correct way to extract the eight least significant bits of a signal would be `s[0:8]` or `s[:8]`, and this is the same way we would extract the first eight elements of a Python array. In essence, the *first* N bits of a signal, when treated like an array of bits, are the N *least significant* bits of that signal.
 
 Remember that since this is Python, negative slice indices are offsets from the end, so a way of getting the most significant bit ("last bit") out of a signal is just `x[-1]`.
 
@@ -41,7 +43,6 @@ You can even assign to a piece of a signal:
 ```python
 m.d.comb += x[:8].eq(y)
 ```
-
 
 ### Tip: Using a slice when comparing
 
@@ -92,7 +93,7 @@ offset = Signal(signed(5)) # -16 to +15
 m.d.comb += ptr.eq(addr + offset)
 ```
 
-we expect `ptr` to be a 16-bit value, since that is what we set it to be. However, what happens here?
+We expect `ptr` to be a 16-bit value, since that is what we set it to be. However, what happens here?
 
 ```python
 y = Signal()
@@ -112,7 +113,7 @@ You can create a new signal out of other signals using `Cat`:
 m.d.comb += x.eq(Cat(a, b, ...))
 ```
 
-This concatenates the given signals _first element last_. This is important: it may be somewhat surprising that `a` in the example above ends up as the least significant bits of `x`. That is, the concatenation of `a` and `b` is not `ab` but `ba`.
+This concatenates the given signals *first element last*. This is important: it may be somewhat surprising that `a` in the example above ends up as the least significant bits of `x`. That is, the concatenation of `a` and `b` is not `ab` but `ba`.
 
 It is now easy to swap the bytes of a 16-bit signal:
 
@@ -225,7 +226,7 @@ A `Record` is a bundle of signals. To define a `Record`, we first must define a 
 ### Layouts
 
 ```python
-from nmigen.hdl.rec import *
+from amaranth.hdl.rec import *
 
 class MyLayout(Layout):
     def __init__(self):
@@ -299,7 +300,7 @@ It is often advantageous to define signals so that the zero value means either i
 
 As another example, each module could output 8 bits of data, but only one module at a time would send data to the data bus. In this case, if a module is inactive, it should output 0 on its `data` port. The value of the data bus is then just the values of all modules' `data` ports, logical-ored together.
 
-This method of "connecting" signals together is called _fan-in_. If the direction of each signal in a record's layout is `DIR_FANIN`, then you can connect several records to a "master" record like this:
+This method of "connecting" signals together is called *fan-in*. If the direction of each signal in a record's layout is `DIR_FANIN`, then you can connect several records to a "master" record like this:
 
 ```python
     self.master_record = Bus()
@@ -313,9 +314,9 @@ The `connect` method on a record returns an array of statements which logical-or
     m.d.comb += self.master_record.eq(bus1 | bus2 | bus3 | ...)
 ```
 
-The disadvantage is that `connect` can connect _parts_ of records, if the field names match. In this sense, the "subordinate" records must have every signal that the "master" record has. That is, the "subordinate" records can have extra signals, but the "master" record must not.
+The disadvantage is that `connect` can connect *parts* of records, if the field names match. In this sense, the "subordinate" records must have every signal that the "master" record has. That is, the "subordinate" records can have extra signals, but the "master" record must not.
 
-_Fan-out_ is where each subordinate record gets a copy of the master record. If the direction of each signal in a record's layout is `DIR_FANOUT`, then you can connect several records to a "master" record like this:
+*Fan-out* is where each subordinate record gets a copy of the master record. If the direction of each signal in a record's layout is `DIR_FANOUT`, then you can connect several records to a "master" record like this:
 
 ```python
     self.master_record = Bus()

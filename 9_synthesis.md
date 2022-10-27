@@ -1,8 +1,8 @@
 # Coming soon
 
-# Supported devices
+## Supported devices
 
-See the [vendor directory](https://github.com/m-labs/nmigen/tree/master/nmigen/vendor) for supported devices and toolchain details.
+See the [vendor directory](https://github.com/m-labs/amaranth/tree/master/amaranth/vendor) for supported devices and toolchain details.
 
 Devices supported as of 20 Dec 2019:
 
@@ -18,13 +18,13 @@ Devices supported as of 20 Dec 2019:
 | Xilinx UltraScale | XilinxUltraScalePlatform  | Vivado             |
 
 
-# Defining your board
+## Defining your board
 
-Many boards are defined for you at [nmigen_boards](https://github.com/m-labs/nmigen-boards/tree/master/nmigen_boards).
+Many boards are defined for you at [amaranth_boards](https://github.com/m-labs/amaranth-boards/tree/master/amaranth_boards).
 
 You can copy one from there and modify it to suit your needs, or create a new class subclassed from one of the above supported device platform classes.
 
-## Class properties
+### Class properties
 
 * `device`: a string. See the base platform class for which one to choose. This affects options passed to the toolchain so that it compiles for the correct chip.
 * `package`: a string. See the base platform class for which one to choose. This affects options passed to the toolchain so that it compiles for the correct package of the chip.
@@ -33,9 +33,10 @@ You can copy one from there and modify it to suit your needs, or create a new cl
 * `default_rst`: the name of the resource that is the reset for the default clock domain.
 * `connectors`: optional, a list of `Connector`. It isn't obvious what purpose this serves. It may have something to do with certain toolchains.
 
-## Resources
+### Resources
 
 A `Resource` is a structure that contains a name, a number, and one or more configuration items for the resource. Adding a `Resource` to a board does two things:
+
 * configures pins on the device
 * allows you to request a resource's `Pin` by name from the platform in your `elaborate` function. Such a `Pin` has several `Signal` associated with it, such as `i` for input and `o` for output, which you can then use in your module.
 
@@ -51,7 +52,7 @@ then pin `J3` on the device will be configured as an input, and you can request 
     platform.request("abc").i
 ```
 
-### Resource configuration items
+#### Resource configuration items
 
 * `Pins`: specifies the space-separated pin names associated with the resource, their direction type, and whether the signal should be automatically inverted when crossing the pin (for, e.g., active low signals). Direction types are:
   * `i`: input only. Signal for the pin is `.i`
@@ -75,15 +76,15 @@ A full resource specification for a clock pin used on a Lattice ICE40 board coul
 
 This says that the `clk` resource is at pin `J3` on the FPGA, has a frequency of 12MHz, is a "global" signal, and uses the LVCMOS voltage standard. Without knowing about the toolchain for the platform, you will not know what attributes are required.
 
-## Example
+### Example
 
 Example for the Lattice ICE40-HX8K breakout board.
 
 ```python
-from nmigen.build import Platform, Resource, Pins, Clock, Attrs, Connector
-from nmigen.build.run import LocalBuildProducts
-from nmigen.cli import main_parser, main_runner
-from nmigen.vendor.lattice_ice40 import LatticeICE40Platform
+from amaranth.build import Platform, Resource, Pins, Clock, Attrs, Connector
+from amaranth.build.run import LocalBuildProducts
+from amaranth.cli import main_parser, main_runner
+from amaranth.vendor.lattice_ice40 import LatticeICE40Platform
 
 class ICE40HX8KBEVNPlatform(LatticeICE40Platform):
     device = "iCE40HX8K"
@@ -146,10 +147,10 @@ if __name__ == "__main__":
     ICE40HX8KBEVNPlatform().build(Blinker(), do_program=True)  # Set to False on WSL!
 ```
 
-# Building
+## Building
 
-```
-$ python3 file.py
+```sh
+python3 file.py
 ```
 
 This will result in a directory, `build`, containing the output files:
@@ -159,7 +160,7 @@ This will result in a directory, `build`, containing the output files:
 * `top.rpt`: Statistics from nextpnr. The most useful is the cell and LUT count at the end.
 * `top.tim`: Timing analysis. Shows how fast you can go. Probably.
 
-# Appendix: Known Lattice ICE40 attributes
+## Appendix: Known Lattice ICE40 attributes
 
 * `GLOBAL`: bool. If True, the pin is global. Global pins are designated `GBIN` in the datasheet pin listing.
 * `IO_STANDARD`: string:

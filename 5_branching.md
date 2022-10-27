@@ -1,5 +1,7 @@
 # Branching
 
+> Note: This chapter is merely a short introduction. The [Control structures](https://amaranth-lang.org/docs/amaranth/latest/lang.html#control-structures) chapter of the Amaranth language guide goes into more detail.
+
 Just as in the standard HDLs, it is possible to use conditional logic.
 
 ## If-Elif-Else
@@ -15,7 +17,7 @@ with m.Else():
     m.d.comb += statements3
 ```
 
-If you use regular Python `if-elif-else`, then those will be evaluated during _generation_ of the logic, not within the logic itself. This can be useful if you want a flag to cause different logic to be generated, and this is a good use of the `platform` string passed to `elaborate()`. So for example:
+If you use regular Python `if-elif-else`, then those will be evaluated during *generation* of the logic, not within the logic itself. This can be useful if you want a flag to cause different logic to be generated, and this is a good use of the `platform` string passed to `elaborate()`. So for example:
 
 ```python
 if (platform == "this"):
@@ -28,7 +30,7 @@ If `platform` is `"this"` then only `statement1` will appear in the generated ha
 
 ### Conditions
 
-The conditions in `If-Elif-Else` are comparisons, for example `a == 1` or `(a >= b) & (a <= c)`. Note that in this latter example, we used parentheses around each term. Each comparison, in essence, becomes a one-bit signal, and `&` is a _bit-wise operator_, not the logical `and`. When in doubt, just use parentheses.
+The conditions in `If-Elif-Else` are comparisons, for example `a == 1` or `(a >= b) & (a <= c)`. Note that in this latter example, we used parentheses around each term. Each comparison, in essence, becomes a one-bit signal, and `&` is a *bit-wise operator*, not the logical `and`. When in doubt, just use parentheses.
 
 If you have a signal with more than one bit and use it as the condition, as in `with m.If(a):`, then the condition will be true if any bit in `a` is 1.
 

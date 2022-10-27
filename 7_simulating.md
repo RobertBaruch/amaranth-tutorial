@@ -1,12 +1,15 @@
 # Simulating
 
-The best way to simulate a module is through nMigen's `Simulator`.
+The best way to simulate a module is through Amaranth's `Simulator`.
 
 ## Define your ports
 
 Define a `ports` function in your module which returns an array of your module's ports:
 
 ```python
+from amaranth import Elaboratable
+
+
 class YourModule(Elaboratable):
     ...
     def ports(self):
@@ -18,9 +21,9 @@ class YourModule(Elaboratable):
 Create a top-level module for your simulation:
 
 ```python
-from nmigen import *
-from nmigen.back.pysim import Simulator, Delay, Settle
-from somewhere import YourModule
+from amaranth import Module
+from amaranth.sim import Simulator, Delay, Settle
+from your_module import YourModule
 
 if __name__ == "__main__":
     m = Module()
@@ -36,14 +39,16 @@ if __name__ == "__main__":
         sim.run()
 ```
 
-> There is currently a bug in nMigen where inputs to your module are not output to the trace file. To get around this, for each such input, place this in your `main` **before** the `Simulator` construction:
+> (This may not be true anymore) There is currently a bug in Amaranth where inputs to your module are not output to the trace file. To get around this, for each such input, place this in your `main` **before** the `Simulator` construction:
+>
 > ```python
 >     input1 = Signal(...)
 >     m.d.comb += yourmodule.input1.eq(input1)
 >     ...
 >     sim = Simulator(m)
 > ```
-> Inside your `process`, refer to this input as `input1`, not `yourmodule.input1`. This will force nMigen to include `input1` in the trace file.
+>
+> Inside your `process`, refer to this input as `input1`, not `yourmodule.input1`. This will force Amaranth to include `input1` in the trace file.
 
 ## Define your clocks, if any
 
@@ -59,7 +64,7 @@ Leaving out `domain` will cause the clock period to be assigned to the default c
 
 ## The process function
 
-The `process` function is a Python generator that nMigen calls to see what to do next in the simulation. Since it is a generator, `process` must `yield` a statement to perform. For example:
+The `process` function is a Python generator that Amaranth calls to see what to do next in the simulation. Since it is a generator, `process` must `yield` a statement to perform. For example:
 
 ```python
     def process():
@@ -69,7 +74,7 @@ The `process` function is a Python generator that nMigen calls to see what to do
 
 The above would set `x` to 0 and `y` to 0xFF, with effectively no delay between them.
 
-You can yield nMigen `Value`s, which you can then use, for example, to do various comparisons:
+You can yield Amaranth `Value`s, which you can then use, for example, to do various comparisons:
 
 ```python
     def process():
@@ -158,13 +163,13 @@ However, you can instead use `sim.run_until()`, which lets you end the simulatio
 
 The simulation is run simply by running the main module:
 
-```
-$ python3 main_module.py
+```sh
+python3 main_module.py
 ```
 
 The output should be a `test.vcd` file and a `test.gtkw` file. Running `gtkwave` will allow you to view the output. Running it on `test.vcd` will make you select the signals you want to see when `gtkwave` opens, while running it on `test.gtkw` will open `gtkwave` showing the signals in the `traces` key that you gave in the call to `sim.write_vcd()`.
 
-```
-$ gtkwave test.vcd
-$ gtkwave test.gtkw
+```sh
+gtkwave test.vcd
+gtkwave test.gtkw
 ```

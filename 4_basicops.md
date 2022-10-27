@@ -1,16 +1,17 @@
 # Basic operations
 
+> Note: This chapter is merely a short introduction. The [Operators](https://amaranth-lang.org/docs/amaranth/latest/lang.html#operators) chapter of the Amaranth language guide goes into more detail.
+
 ## Statements
 
-nMigen doesn't convert Python to hardware. In essence, what you are writing using nMigen is a _generator_ of logic, not the logic itself. So if you want one `Value` to take the value of another, you don't write `a = b`, but instead you call the method of `a` that generates the equality: `a.eq(b)`. This is known as a _statement_.
+Amaranth doesn't convert Python to hardware. In essence, what you are writing using Amaranth is a *generator* of HDL logic, not the logic itself. So if you want one `Value` to take the value of another, you don't write `a = b`, but instead you call the method of `a` that generates the equality: `a.eq(b)`. This is known as an HDL *statement*.
 
-However, many math operators are overridable in Python, since these translate to calls to Python functions. So for example, you can write `a.eq(b+1)` instead of something like `a.eq(b.plus(1))` because Python addition can be overridden to a function call, and nMigen's `Signal` class does that for all such operators.
+However, many math operators are overridable in Python, since these translate to calls to Python functions. So for example, you can write `a.eq(b+1)` instead of something like `a.eq(b.plus(1))` because Python addition can be overridden to a function call, and Amaranth's `Signal` class does that for all such operators.
 
 ### List of directly translatable Python operators
 
 | Operator | Operation                | Notes                            |
 | -------- | ------------------------ | -------------------------------- |
-| `~`      | inversion                |
 | `-`      | arithmetic negation      |
 | `+`      | addition                 |
 | `-`      | subtraction              |
@@ -19,6 +20,7 @@ However, many math operators are overridable in Python, since these translate to
 | `//`     | division                 | Integer division, rounding down. |
 | `<<`     | shift left               |
 | `>>`     | shift right              | Effectively arithmetic, see below. |
+| `~`      | bitwise complement       |
 | `&`      | bitwise and              |
 | `\|`     | bitwise or               |
 | `^`      | bitwise xor              |
@@ -29,7 +31,7 @@ However, many math operators are overridable in Python, since these translate to
 | `<`      | less than                |
 | `<=`     | less than or equal to    |
 
-Note that there are no translatable Python logical operators (`and`, `or`). The logical reduction functions `any` and `all` are also not available in nMigen expressions.  Attempts to use an nMigen value as a boolean will result in an error saying `Attempted to convert nMigen value to boolean`.
+Note that there are no translatable Python logical operators (`not`, `and`, `or`). Attempts to use an Amaranth value as a boolean will result in an error saying `Attempted to convert Amaranth value to Python boolean`.
 
 Shift right is effectively arithmetic, where the sign bit is present for signed Values, or absent (or implicitly zero) for unsigned Values. Consider that if right shift is applied to a signed Value, the shift properly duplicates the sign bit. If it is applied to an unsigned Value, the shift is logical -- you could consider it an arithmetic shift where the "missing" sign bit is always zero. Because shift right on an unsigned Value is the same as logical shift right, `>>` is a logical shift right when applied to an unsigned Value.
 
@@ -38,7 +40,7 @@ Shift right is effectively arithmetic, where the sign bit is present for signed 
 Python's integers are of potentially infinite bit width. In keeping with this philosophy, operations on signals create results with enough bits to hold the result, given the widths of the operands, and whether they are signed (represented in 2's complement) or not. Thus, adding two unsigned 4-bit signals must result in a 5-bit signal. The range of each operand is 0 to 15, so the range of the result is 0 to 30. This requires 5 bits.
 
 ```python
->>> from nmigen import *
+>>> from amaranth import Signal
 >>> s1 = Signal(4)
 >>> s2 = Signal(4)
 >>> v = s1 + s2

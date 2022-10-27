@@ -7,8 +7,8 @@
 ## Assert, Assume, and Cover for fun and profit.
 
 ```python
-from nmigen.asserts import Assert, Assume, Cover
-from nmigen.cli import main_parser, main_runner
+from amaranth.asserts import Assert, Assume, Cover
+from amaranth.cli import main_parser, main_runner
 from somewhere import Adder
 
 if __name__ == "__main__":
@@ -29,13 +29,13 @@ if __name__ == "__main__":
 ## Past, Rose, Fell, Stable
 
 ```python
-from nmigen.asserts import Assert, Assume, Cover
-from nmigen.asserts import Past, Rose, Fell, Stable
+from amaranth.asserts import Assert, Assume, Cover
+from amaranth.asserts import Past, Rose, Fell, Stable
 ```
 
 ## The sby file
 
-```
+```ini
 [tasks]
 cover
 bmc
@@ -61,7 +61,7 @@ toplevel.il
 
 Generate the output, then run Symbiyosys:
 
-```
-$ python3 adder_test.py generate -t il > toplevel.il
-$ sby -f <file>.sby
+```sh
+python3 adder_test.py generate -t il > toplevel.il
+sby -f <file>.sby
 ```
