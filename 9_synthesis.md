@@ -2,7 +2,7 @@
 
 ## Supported devices
 
-See the [vendor directory](https://github.com/m-labs/amaranth/tree/master/amaranth/vendor) for supported devices and toolchain details.
+See the [vendor directory](https://github.com/amaranth-lang/amaranth/tree/main/amaranth/vendor) for supported devices and toolchain details.
 
 Devices supported as of 20 Dec 2019:
 
@@ -20,7 +20,7 @@ Devices supported as of 20 Dec 2019:
 
 ## Defining your board
 
-Many boards are defined for you at [amaranth_boards](https://github.com/m-labs/amaranth-boards/tree/master/amaranth_boards).
+Many boards are defined for you at [amaranth_boards](https://github.com/amaranth-lang/amaranth-boards/tree/main/amaranth_boards).
 
 You can copy one from there and modify it to suit your needs, or create a new class subclassed from one of the above supported device platform classes.
 
