@@ -135,18 +135,18 @@ You can replicate a signal by concatenating it to itself via `Cat(x, x)`. But yo
 
 ```python
 uint16 = Signal(unsigned(16)) # Yes, note *un*signed
-int32 = Signal(signed(32))
+uint32 = Signal(unsigned(32))
 
-m.d.comb += int32.eq(Cat(uint16, Repl(uint16[15], 16)))
+m.d.comb += uint32.eq(Cat(uint16, Repl(uint16[15], 16)))
 ```
 
 Of course, the same can be done by simply using the right signal types:
 
 ```python
-uint16 = Signal(unsigned(16)) # Yes, note *un*signed
+int16 = Signal(signed(16))
 int32 = Signal(signed(32))
 
-m.d.comb += int32.eq(uint16)
+m.d.comb += int32.eq(int16)
 ```
 
 The generated code will do the right thing.
