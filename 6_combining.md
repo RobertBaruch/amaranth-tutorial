@@ -176,7 +176,7 @@ You can even create multidimensional arrays:
 
 ```python
 # Creates a 3 by 5 array of 16-bit signals:
-yy = Array([Array[Signal(unsigned(16)) for _ in range(5)] for _ in range(3)])
+yy = Array([Array([Signal(unsigned(16)) for _ in range(5)]) for _ in range(3)])
 ```
 
 You can index into the array with a constant:
